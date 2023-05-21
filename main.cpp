@@ -1,4 +1,4 @@
-#include "Postacie.h"
+#include "Player.h"
 #include "Game.h"
 #include "Obiekty.h"
 using namespace std;
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	game->clean();
 	delete game;
 
-
+	
 	return 0;
 }
 

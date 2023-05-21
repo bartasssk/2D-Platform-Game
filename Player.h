@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -6,11 +7,14 @@ using namespace std;
 
 class Player {
 private:
+	SDL_Renderer* rend;
 	SDL_Rect pos;
 	SDL_Texture* tex;
+
+	int velocityX;
+	int velocityY;
 public:
-	Player();
-	void draw();
+	Player(SDL_Renderer* rend, const char* imgpth, int x, int y);
 	void position();
 	void gravity();
 	void side();
