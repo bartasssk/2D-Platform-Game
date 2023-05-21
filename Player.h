@@ -15,7 +15,6 @@ private:
 	int velocityY;
 public:
 	Player(SDL_Renderer* rend, const char* imgpth, int x, int y);
-	void position();
 	void gravity();
 	void side();
 	void movement();

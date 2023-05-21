@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "Postacie.h"
+
 
 Game::Game() {
 	cnt = 0;
