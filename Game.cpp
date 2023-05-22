@@ -1,32 +1,30 @@
 #include "Game.h"
+#include "Player.h"
 
+Player* player = nullptr;
 
 Game::Game() {
 	cnt = 0;
 }
 
-SDL_Texture* playertex = nullptr;
-
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
 	int isFullscreen = 0;
 
-	if (fullscreen == 1) {
+	if (fullscreen) {
 		isFullscreen = SDL_WINDOW_FULLSCREEN;
 	}
-
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		window = SDL_CreateWindow(title, xpos, ypos, width, height, fullscreen);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 	}
 
-	SDL_Surface* tempSurf = IMG_Load("textures/stickman1.png");
-	playertex = SDL_CreateTextureFromSurface(renderer, tempSurf);
-	SDL_FreeSurface(tempSurf);
+	player = new Player(renderer);
 }
 
 void Game::events() {
 	SDL_Event event;
 	SDL_PollEvent(&event);
+	player->movement(event);
 	switch (event.type) {
 	default: {
 		break;
@@ -36,17 +34,14 @@ void Game::events() {
 
 void Game::update()
 {
-	cnt++;
-	cout << cnt << endl;
-
 }
 
 void Game::render()
 {
 
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderCopy(renderer, playertex, NULL, NULL);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	player->render();
 	SDL_RenderPresent(renderer);
 }
 
@@ -60,7 +55,7 @@ void Game::clean()
 
 bool Game::running() {
 	SDL_Event quit;
-	while (SDL_PollEvent(&quit)) {
+	SDL_PollEvent(&quit);
 		switch (quit.type) {
 		case SDL_QUIT: {
 			return false;
@@ -73,7 +68,6 @@ bool Game::running() {
 			}
 		}
 		}
-	}
 	return true;
 }
 

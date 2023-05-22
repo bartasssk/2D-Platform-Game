@@ -16,10 +16,9 @@ int main(int argc, char* argv[])
 	
 	Game* game = nullptr;
 	game = new Game();
-	game->init("Rise from the ashes", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, 0);
+	game->init("Rise from the ashes", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 
-
-	do {
+	while (game->running()) {
 		FrameStart = SDL_GetTicks();
 		FrameTime = SDL_GetTicks() - FrameStart;
 
@@ -29,7 +28,7 @@ int main(int argc, char* argv[])
 		game->events();
 		game->update();
 		game->render();
-	} while (game->running());
+	}
 	game->clean();
 	delete game;
 

@@ -8,16 +8,17 @@ using namespace std;
 class Player {
 private:
 	SDL_Renderer* rend;
-	SDL_Rect pos;
+	SDL_Rect dst;
 	SDL_Texture* tex;
 
-	int velocityX;
-	int velocityY;
+	int velX;
+	int velY;
 public:
-	Player(SDL_Renderer* rend, const char* imgpth, int x, int y);
+	Player(SDL_Renderer* renderer);
+	void render();
 	void gravity();
 	void side();
-	void movement();
+	void movement(SDL_Event &event);
 	void jumping();
 	~Player();
 };
