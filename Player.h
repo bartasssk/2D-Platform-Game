@@ -3,12 +3,12 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
-using namespace std;
 
 class Player {
 private:
 	SDL_Renderer* rend;
 	SDL_Rect dst;
+	SDL_Rect sheight;
 	SDL_Texture* tex;
 
 	int velX;
@@ -19,6 +19,6 @@ public:
 	void gravity();
 	void side();
 	void movement(SDL_Event &event);
-	void jumping();
+	void jumping(SDL_Event &event);
 	~Player();
 };

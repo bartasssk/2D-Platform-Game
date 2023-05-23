@@ -1,10 +1,9 @@
 #include "Game.h"
 #include "Player.h"
+using namespace std;
 
-Player* player = nullptr;
 
-Game::Game() {
-	cnt = 0;
+Game::Game(): window(nullptr), renderer(nullptr), player(nullptr) {
 }
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
@@ -21,15 +20,10 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	player = new Player(renderer);
 }
 
-void Game::events() {
-	SDL_Event event;
-	SDL_PollEvent(&event);
+void Game::events(SDL_Event &event) {
 	player->movement(event);
-	switch (event.type) {
-	default: {
-		break;
-	}
-	}
+	player->jumping(event);
+	player->gravity();
 }
 
 void Game::update()
@@ -53,16 +47,14 @@ void Game::clean()
 	cout << "Game cleaned" << endl;
 }
 
-bool Game::running() {
-	SDL_Event quit;
-	SDL_PollEvent(&quit);
-		switch (quit.type) {
+bool Game::running(SDL_Event &event) {
+		switch (event.type) {
 		case SDL_QUIT: {
 			return false;
 			break;
 		}
 		case SDL_KEYDOWN: {
-			if (quit.key.keysym.sym == SDLK_ESCAPE) {
+			if (event.key.keysym.sym == SDLK_ESCAPE) {
 				return false;
 				break;
 			}
@@ -71,4 +63,7 @@ bool Game::running() {
 	return true;
 }
 
-Game::~Game() {}
+Game::~Game() {
+	delete player;
+	player = nullptr;
+}
