@@ -4,13 +4,17 @@
 
 Player::Player(SDL_Renderer* renderer): velX(0), velY(0){
 	rend = renderer;
-	SDL_Surface* tempSurf = IMG_Load("textures/kwadrat1.png");
+	SDL_Surface* tempSurf = IMG_Load("textures/rycerzyk1.png");
 	tex = SDL_CreateTextureFromSurface(rend, tempSurf);
 	SDL_FreeSurface(tempSurf);
-	dst.h = 200;
-	dst.w = 200;
-	dst.x = 0;
+	dst.h = 64;
+	dst.w = 64;
+	dst.x = 100;
 	dst.y = 500;
+	src.h = 64;
+	src.w = 64;
+	src.x = 0;
+	src.y = 0;
 	sheight.y = dst.y;
 }
 
@@ -18,11 +22,11 @@ void Player::movement(SDL_Event &event) {
 		if (event.type == SDL_KEYDOWN and event.key.repeat == 0) {
 				switch (event.key.keysym.sym) {
 				case SDLK_LEFT: {
-					velX = -8;
+					velX -= 8;
 					break;
 				}
 				case SDLK_RIGHT: {
-					velX = 8;
+					velX += 8;
 					break;
 				}
 				}
@@ -31,20 +35,14 @@ void Player::movement(SDL_Event &event) {
 		else if (event.type == SDL_KEYUP and event.key.repeat == 0) {
 			switch (event.key.keysym.sym) {
 			case SDLK_LEFT: {
-				velX = 0;
+				velX += 8;
 				break;
 			}
 			case SDLK_RIGHT: {
-				velX = 0;
+				velX -= 8;
 				break;
 			}
 			}
-		}
-		else if (velX > 8) {
-			velX = 8;
-		}
-		else if (velX < -8) {
-			velX = -8;
 		}
 		dst.x += velX;
 }
@@ -54,7 +52,7 @@ void Player::jumping(SDL_Event& event) {
 		switch (event.key.keysym.sym) {
 		case SDLK_UP: {
 			if (dst.y >= sheight.y - 320 and velY >= 0) {
-				velY = 50;
+				velY = 40;
 			}
 			break;
 		}
@@ -62,7 +60,7 @@ void Player::jumping(SDL_Event& event) {
 	}
 	dst.y -= velY;
 	if (velY > 0 and dst.y < sheight.y) {
-		velY -= 5;
+		velY -= 3;
 	}
 }
 
@@ -78,7 +76,7 @@ void Player::gravity() {
 }
 
 void Player::render() {
-	SDL_RenderCopy(rend, tex, NULL, &dst);
+	SDL_RenderCopy(rend, tex, &src, &dst);
 }
 
 Player::~Player() {

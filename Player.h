@@ -8,6 +8,7 @@ class Player {
 private:
 	SDL_Renderer* rend;
 	SDL_Rect dst;
+	SDL_Rect src;
 	SDL_Rect sheight;
 	SDL_Texture* tex;
 

@@ -18,6 +18,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	player = new Player(renderer);
+	object = new Object(renderer, "textures/DefaultowyBlok.png");
 }
 
 void Game::events(SDL_Event &event) {
@@ -36,6 +37,7 @@ void Game::render()
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	player->render();
+	object->render();
 	SDL_RenderPresent(renderer);
 }
 
@@ -61,6 +63,13 @@ bool Game::running(SDL_Event &event) {
 		}
 		}
 	return true;
+}
+
+SDL_Texture* Game::loadTex(const char* FilePath) {
+	SDL_Texture* texture = NULL;
+	texture = IMG_LoadTexture(renderer, FilePath);
+
+	return texture;
 }
 
 Game::~Game() {
