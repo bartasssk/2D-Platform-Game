@@ -38,8 +38,23 @@ void Game::render()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	player->render();
 	object->render();
+	/*setTer();*/
 	SDL_RenderPresent(renderer);
 }
+
+//void Game::setTer() {
+//	Object object(renderer, "textures/DefaultowyBlok.png");
+//	for (int i = 0; i < 20; ++i) {
+//		objects.push_back(object);
+//		SDL_Rect newDst;
+//		newDst.x = i * 64;
+//		newDst.y = 564;
+//		newDst.w = 64;
+//		newDst.h = 64;
+//		objects[i].setDst(newDst);
+//		objects[i].render();
+//	}
+//}
 
 void Game::clean()
 {
@@ -75,4 +90,6 @@ SDL_Texture* Game::loadTex(const char* FilePath) {
 Game::~Game() {
 	delete player;
 	player = nullptr;
+	delete object;
+	object = nullptr;
 }

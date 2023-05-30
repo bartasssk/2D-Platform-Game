@@ -12,6 +12,10 @@ private:
 public:
 	Object(SDL_Renderer* rend, const char* FilePath);
 	void render();
+	void setDst(SDL_Rect newDst);
 	SDL_Texture* getTex();
+	SDL_Renderer* getRend();
+	SDL_Rect getDst();
+	SDL_Rect getSrc();
 	~Object();
 };

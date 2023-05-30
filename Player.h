@@ -3,23 +3,21 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "Obiekty.h"
 
-class Player {
+class Player : public Object {
 private:
-	SDL_Renderer* rend;
-	SDL_Rect dst;
-	SDL_Rect src;
 	SDL_Rect sheight;
-	SDL_Texture* tex;
 
 	int velX;
 	int velY;
 public:
-	Player(SDL_Renderer* renderer);
-	void render();
+	Player(SDL_Renderer* rend);
 	void gravity();
 	void side();
 	void movement(SDL_Event &event);
 	void jumping(SDL_Event &event);
+	void setDst(SDL_Rect newDst);
+	void render();
 	~Player();
 };
