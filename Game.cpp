@@ -18,7 +18,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	player = new Player(renderer);
-	object = new Object(renderer, "textures/DefaultowyBlok.png");
+	
 }
 
 void Game::events(SDL_Event &event) {
@@ -37,24 +37,24 @@ void Game::render()
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	player->render();
-	object->render();
-	/*setTer();*/
+	/*for (int j = 0; j < 5; ++j) {
+		objects[j].render();
+	}*/
 	SDL_RenderPresent(renderer);
 }
 
-//void Game::setTer() {
-//	Object object(renderer, "textures/DefaultowyBlok.png");
-//	for (int i = 0; i < 20; ++i) {
-//		objects.push_back(object);
-//		SDL_Rect newDst;
-//		newDst.x = i * 64;
-//		newDst.y = 564;
-//		newDst.w = 64;
-//		newDst.h = 64;
-//		objects[i].setDst(newDst);
-//		objects[i].render();
-//	}
-//}
+void Game::setTer() {
+	Object object1(renderer, "textures/kwadrat1.png");
+	for (int i = 0; i < 5; ++i) {
+		objects.push_back(object1);
+		SDL_Rect newDst{};
+		newDst.x = i * 64;
+		newDst.y = 564;
+	    newDst.w = 64;
+		newDst.h = 64;
+		objects[i].setDst(newDst);
+}
+}
 
 void Game::clean()
 {
@@ -90,6 +90,4 @@ SDL_Texture* Game::loadTex(const char* FilePath) {
 Game::~Game() {
 	delete player;
 	player = nullptr;
-	delete object;
-	object = nullptr;
 }

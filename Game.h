@@ -13,7 +13,6 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	Player* player = nullptr;
-	Object* object = nullptr;
 	std::vector <Object> objects;
 public:
 	Game();

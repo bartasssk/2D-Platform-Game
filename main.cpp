@@ -14,10 +14,10 @@ int main(int argc, char* argv[])
 	Uint32 FrameStart;
 	int FrameTime;
 	
-	Game* game = nullptr;
-	game = new Game();
-	game->init("Rise from the ashes", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+	Game game;
+	game.init("Rise from the ashes", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	SDL_Event event{};
+	/*game.setTer();*/
 
 	while (1) {
 		FrameStart = SDL_GetTicks();
@@ -27,16 +27,14 @@ int main(int argc, char* argv[])
 			SDL_Delay(FrameDelay - FrameTime);
 		}
 		SDL_PollEvent(&event);
-		if (!game->running(event)) {
+		if (!game.running(event)) {
 			break;
 		}
-		game->events(event);
-		game->update();
-		game->render();
+		game.events(event);
+		game.update();
+		game.render();
 	}
-	game->clean();
-	delete game;
-
+	game.clean();
 	
 	return 0;
 }

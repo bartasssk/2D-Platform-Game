@@ -1,7 +1,6 @@
 #include "Obiekty.h"
 
-Object::Object(SDL_Renderer* rend, const char* FilePath) : renderer(NULL), texture(NULL) {
-	renderer = rend;
+Object::Object(SDL_Renderer* rend, const char* FilePath) : renderer(rend), texture(NULL) {
 	texture = IMG_LoadTexture(renderer, FilePath);
 	dst.x = 100;
 	dst.y = 564;
