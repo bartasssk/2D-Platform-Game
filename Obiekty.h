@@ -1,23 +1,21 @@
 #pragma once
 #include <iostream>
-using namespace std;
+#include <SDL.h>
+#include <SDL_image.h>
 
-class Platform {
+class Object {
 private:
-	int width;
-	int height;
+	SDL_Texture* texture;
+	SDL_Renderer* renderer;
+	SDL_Rect dst;
+	SDL_Rect src;
 public:
-	Platform();
-	~Platform();
-};
-
-class Obstacle {
-private:
-	int width;
-	int height;
-	int DMG;
-public:
-	Obstacle();
-	void stagger();
-	~Obstacle();
+	Object(SDL_Renderer* rend, const char* FilePath);
+	void render();
+	void setDst(SDL_Rect newDst);
+	SDL_Texture* getTex();
+	SDL_Renderer* getRend();
+	SDL_Rect getDst();
+	SDL_Rect getSrc();
+	~Object();
 };

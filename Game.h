@@ -3,23 +3,28 @@
 #include <iostream>
 #include <stdio.h>
 #include <SDL_image.h>
-using namespace std;
+#include <vector>
+#include "Obiekty.h"
 
 
-
+class Player;
 class Game {
 private:
-	int cnt;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+	Player* player = nullptr;
+	std::vector <Object> objects;
 public:
 	Game();
 	~Game();
 
 	void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
-	void events();
+	void events(SDL_Event &event);
 	void update();
+	void setTer();
+	void collision();
 	void render();
 	void clean();
-	bool running();
+	bool running(SDL_Event &event);
+	SDL_Texture* loadTex(const char* FilePath);
 };
