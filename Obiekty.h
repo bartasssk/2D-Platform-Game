@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
 
 class Object {
 private:
@@ -11,8 +12,10 @@ private:
 	SDL_Rect src;
 public:
 	Object(SDL_Renderer* rend, const char* FilePath);
+	Object() = default;
 	void render();
 	void setDst(SDL_Rect newDst);
+	void clean();
 	SDL_Texture* getTex();
 	SDL_Renderer* getRend();
 	SDL_Rect getDst();

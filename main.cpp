@@ -17,8 +17,6 @@ int main(int argc, char* argv[])
 	Game game;
 	game.init("Rise from the ashes", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	SDL_Event event{};
-	/*game.setTer();*/
-
 	while (1) {
 		FrameStart = SDL_GetTicks();
 		FrameTime = SDL_GetTicks() - FrameStart;

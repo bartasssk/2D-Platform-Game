@@ -3,7 +3,8 @@
 using namespace std;
 
 
-Game::Game(): window(nullptr), renderer(nullptr), player(nullptr) {
+Game::Game() : window(nullptr), renderer(nullptr), player(nullptr), objects{} {
+	objects.resize(10);
 }
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
@@ -18,46 +19,69 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	player = new Player(renderer);
-	
+	setTer(objects);
 }
 
 void Game::events(SDL_Event &event) {
-	player->movement(event);
-	player->jumping(event);
-	player->gravity();
+	player->setCurrentSDLEvent(&event);
+	
+	
 }
+
 
 void Game::update()
 {
+	//vector<character> characters(player, enemy)
+	/*for (auto& character : characters)
+	{
+		vcharacter->movement();
+		character->jump();
+		character0 > gravity();
+
+	}*/
+	player->movement();
+	player->jumping();
+	player->gravity();
+	//enemys->movement();
+
+}
+
+void Game::setTer(std::vector<Object>& vec) {
+	//Object object1(renderer, "textures/DefaultowyBlok.png");
+	for (int i = 0; i < 10; ++i) {
+		//vec.push_back(object1);
+		//vec.emplace_back(renderer, "textures/DefaultowyBlok.png");
+		vec[i] = std::move(Object(renderer, "textures/DefaultowyBlok.png"));
+		SDL_Rect newDst{};
+		newDst.x = i * 64;
+		newDst.y = 564;
+		newDst.w = 64;
+		newDst.h = 64;
+		vec[i].setDst(newDst);
+
+	}
 }
 
 void Game::render()
 {
-
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	for (size_t i = 0; i < objects.size(); ++i) {
+		objects[i].render();
+	}
+	
 	player->render();
-	/*for (int j = 0; j < 5; ++j) {
-		objects[j].render();
-	}*/
 	SDL_RenderPresent(renderer);
 }
 
-void Game::setTer() {
-	Object object1(renderer, "textures/kwadrat1.png");
-	for (int i = 0; i < 5; ++i) {
-		objects.push_back(object1);
-		SDL_Rect newDst{};
-		newDst.x = i * 64;
-		newDst.y = 564;
-	    newDst.w = 64;
-		newDst.h = 64;
-		objects[i].setDst(newDst);
-}
-}
+
 
 void Game::clean()
 {
+	for (int i = 0; i < objects.size(); ++i) {
+		objects[i].clean();
+	}
+	player->clean();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
@@ -90,4 +114,5 @@ SDL_Texture* Game::loadTex(const char* FilePath) {
 Game::~Game() {
 	delete player;
 	player = nullptr;
+
 }

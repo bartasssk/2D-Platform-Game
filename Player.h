@@ -11,13 +11,15 @@ private:
 
 	int velX;
 	int velY;
+	SDL_Event* currentEvent;
 public:
 	Player(SDL_Renderer* rend);
 	void gravity();
 	void side();
-	void movement(SDL_Event &event);
-	void jumping(SDL_Event &event);
+	void movement();
+	void jumping();
 	void setDst(SDL_Rect newDst);
-	void render();
+	void setCurrentSDLEvent(SDL_Event* event) { currentEvent = event; };
+	//void render();
 	~Player();
 };

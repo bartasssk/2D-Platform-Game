@@ -1,8 +1,12 @@
 #include "Player.h"
 #include  "Game.h"
 
+const int PLAYER_SPEED = 8;
+const int JUMP_VEL = 40;
+const int GRAVITY = 3;
 
-Player::Player(SDL_Renderer* rend) : Object::Object(rend, "textures/rycerzyk1.png"), velX(0), velY(0) {
+
+Player::Player(SDL_Renderer* rend) : Object::Object(rend, "textures/rycerzyk1.png"), velX(0), velY(0), currentEvent(nullptr) {
 
 	SDL_Rect PlayerDst{};
 	PlayerDst.x = 10;
@@ -13,28 +17,28 @@ Player::Player(SDL_Renderer* rend) : Object::Object(rend, "textures/rycerzyk1.pn
 	setDst(PlayerDst);
 }
 
-void Player::movement(SDL_Event& event) {
-	if (event.type == SDL_KEYDOWN and event.key.repeat == 0) {
-		switch (event.key.keysym.sym) {
+void Player::movement() {
+	if (currentEvent->type == SDL_KEYDOWN and currentEvent->key.repeat == 0) {
+		switch (currentEvent->key.keysym.sym) {
 		case SDLK_LEFT: {
-			velX -= 8;
+			velX -= PLAYER_SPEED;
 			break;
 		}
 		case SDLK_RIGHT: {
-			velX += 8;
+			velX += PLAYER_SPEED;
 			break;
 		}
 		}
 
 	}
-	else if (event.type == SDL_KEYUP and event.key.repeat == 0) {
-		switch (event.key.keysym.sym) {
+	else if (currentEvent->type == SDL_KEYUP and currentEvent->key.repeat == 0) {
+		switch (currentEvent->key.keysym.sym) {
 		case SDLK_LEFT: {
-			velX += 8;
+			velX += PLAYER_SPEED;
 			break;
 		}
 		case SDLK_RIGHT: {
-			velX -= 8;
+			velX -= PLAYER_SPEED;
 			break;
 		}
 		}
@@ -44,12 +48,12 @@ void Player::movement(SDL_Event& event) {
 	setDst(newDst);
 }
 
-void Player::jumping(SDL_Event& event) {
-	if (event.type == SDL_KEYDOWN and event.key.repeat == 0) {
-		switch (event.key.keysym.sym) {
+void Player::jumping() {
+	if (currentEvent->type == SDL_KEYDOWN and currentEvent->key.repeat == 0) {
+		switch (currentEvent->key.keysym.sym) {
 		case SDLK_UP: {
 			if (getDst().y >= sheight.y - 320 and velY >= 0) {
-				velY = 40;
+				velY = JUMP_VEL;
 			}
 			break;
 		}
@@ -59,21 +63,21 @@ void Player::jumping(SDL_Event& event) {
 	newDst.y -= velY;
 	setDst(newDst);
 	if (velY > 0 and getDst().y < sheight.y) {
-		velY -= 3;
+		velY -= GRAVITY;
 	}
 }
 
 void Player::gravity() {
 	SDL_Rect newDst = getDst();
 	if ((velY == 0 or velY < 0) and velY > -20 and getDst().y < sheight.y) {
-		velY -= 4;
+		velY -= GRAVITY;
 		newDst.y += velY;
 		setDst(newDst);
 	}
 	else if (getDst().y >= sheight.y) {
-		velY = 0;
+		//velY = 0;
 		newDst.y = sheight.y;
-		setDst(newDst);
+		//setDst(newDst);
 	}
 }
 
@@ -81,14 +85,12 @@ void Player::setDst(SDL_Rect newDst) {
 	Object::setDst(newDst);
 }
 
-void Player::render() {
-	SDL_Rect srcRect = getSrc();
-	SDL_Rect dstRect = getDst();
-	SDL_RenderCopy(getRend(), getTex(), &srcRect, &dstRect);
-}
+//void Player::render() {
+//	SDL_Rect srcRect = getSrc();
+//	SDL_Rect dstRect = getDst();
+//	SDL_RenderCopy(getRend(), getTex(), &srcRect, &dstRect);
+//}
 
 Player::~Player() {
-	SDL_DestroyTexture(getTex());
-	SDL_DestroyRenderer(getRend());
 }
 

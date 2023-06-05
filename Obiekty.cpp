@@ -1,7 +1,9 @@
 #include "Obiekty.h"
 
 Object::Object(SDL_Renderer* rend, const char* FilePath) : renderer(rend), texture(NULL) {
-	texture = IMG_LoadTexture(renderer, FilePath);
+	SDL_Surface* tempSurf = IMG_Load(FilePath);
+	texture = SDL_CreateTextureFromSurface(renderer,tempSurf);
+	SDL_FreeSurface(tempSurf);
 	dst.x = 100;
 	dst.y = 564;
 	dst.w = 64;
@@ -36,7 +38,9 @@ void Object::render() {
 	SDL_RenderCopy(renderer, texture, &src, &dst);
 }
 
-Object::~Object() {
+void Object::clean() {
 	SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(renderer);
+}
+
+Object::~Object() {
 }
