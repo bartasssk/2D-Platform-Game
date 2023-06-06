@@ -38,9 +38,8 @@ void Game::update()
 
 	}*/
 	collider->isGround(player, objects);
-	if (collider->canImove(player, objects) == true) {
-		player->move();
-	}
+	collider->canImove(player, objects);
+	player->move();
 	if (player->getGroundState() == false){
 		player->gravity();
 	}
@@ -63,9 +62,6 @@ void Game::setTer(std::vector<Object>& vec) {
 	}
 }
 
-void collision() {
-
-}
 
 void Game::render()
 {

@@ -33,19 +33,22 @@ void Player::move() {
 			break;
 		}
 		}
-
 	}
 	else if (currentEvent->type == SDL_KEYUP and currentEvent->key.repeat == 0) {
 		switch (currentEvent->key.keysym.sym) {
 		case SDLK_LEFT: {
-			tempVelX += PLAYER_SPEED;
-			setVelX(tempVelX);
-			break;
+			if (getVelX() != 0) {
+				tempVelX += PLAYER_SPEED;
+				setVelX(tempVelX);
+				break;
+			}
 		}
 		case SDLK_RIGHT: {
-			tempVelX -= PLAYER_SPEED;
-			setVelX(tempVelX);
-			break;
+			if (getVelX() != 0) {
+				tempVelX -= PLAYER_SPEED;
+				setVelX(tempVelX);
+				break;
+			}
 		}
 		}
 	}
