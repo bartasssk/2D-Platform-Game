@@ -3,23 +3,17 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "Obiekty.h"
+#include "Character.h"
 
-class Player : public Object {
+class Collider;
+
+class Player : public Character {
 private:
-	SDL_Rect sheight;
-
-	int velX;
-	int velY;
 	SDL_Event* currentEvent;
 public:
 	Player(SDL_Renderer* rend);
+	void move() override;
 	void gravity();
-	void side();
-	void movement();
-	void jumping();
-	void setDst(SDL_Rect newDst);
 	void setCurrentSDLEvent(SDL_Event* event) { currentEvent = event; };
-	//void render();
 	~Player();
 };

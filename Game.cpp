@@ -1,9 +1,9 @@
 #include "Game.h"
-#include "Player.h"
+#include "Collider.h"
 using namespace std;
 
 
-Game::Game() : window(nullptr), renderer(nullptr), player(nullptr), objects{} {
+Game::Game() : window(nullptr), renderer(nullptr), player(nullptr), objects{}, collider{} {
 	objects.resize(10);
 }
 
@@ -24,8 +24,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 void Game::events(SDL_Event &event) {
 	player->setCurrentSDLEvent(&event);
-	
-	
 }
 
 
@@ -39,27 +37,34 @@ void Game::update()
 		character0 > gravity();
 
 	}*/
-	player->movement();
-	player->jumping();
-	player->gravity();
+	collider->isGround(player, objects);
+	if (collider->canImove(player, objects) == true) {
+		player->move();
+	}
+	if (player->getGroundState() == false){
+		player->gravity();
+	}
 	//enemys->movement();
 
 }
 
 void Game::setTer(std::vector<Object>& vec) {
 	//Object object1(renderer, "textures/DefaultowyBlok.png");
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 5; ++i) {
 		//vec.push_back(object1);
 		//vec.emplace_back(renderer, "textures/DefaultowyBlok.png");
 		vec[i] = std::move(Object(renderer, "textures/DefaultowyBlok.png"));
 		SDL_Rect newDst{};
-		newDst.x = i * 64;
-		newDst.y = 564;
+		newDst.x = 128 + i * 64;
+		newDst.y = 564 - i * 64;
 		newDst.w = 64;
 		newDst.h = 64;
 		vec[i].setDst(newDst);
-
 	}
+}
+
+void collision() {
+
 }
 
 void Game::render()
@@ -69,7 +74,6 @@ void Game::render()
 	for (size_t i = 0; i < objects.size(); ++i) {
 		objects[i].render();
 	}
-	
 	player->render();
 	SDL_RenderPresent(renderer);
 }

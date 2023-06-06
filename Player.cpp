@@ -1,31 +1,35 @@
 #include "Player.h"
-#include  "Game.h"
+#include "Collider.h"
+
 
 const int PLAYER_SPEED = 8;
-const int JUMP_VEL = 40;
-const int GRAVITY = 3;
+const int JUMP_VEL = 24;
+const int GRAVITY = 2;
 
 
-Player::Player(SDL_Renderer* rend) : Object::Object(rend, "textures/rycerzyk1.png"), velX(0), velY(0), currentEvent(nullptr) {
+Player::Player(SDL_Renderer* rend) : Character(rend), currentEvent(nullptr) {}
 
-	SDL_Rect PlayerDst{};
-	PlayerDst.x = 10;
-	PlayerDst.y = 500;
-	PlayerDst.h = 64;
-	PlayerDst.w = 64;
-	sheight.y = PlayerDst.y;
-	setDst(PlayerDst);
-}
-
-void Player::movement() {
+void Player::move() {
+	int tempVelX = getVelX();
+	int tempVelY = getVelY();
 	if (currentEvent->type == SDL_KEYDOWN and currentEvent->key.repeat == 0) {
 		switch (currentEvent->key.keysym.sym) {
 		case SDLK_LEFT: {
-			velX -= PLAYER_SPEED;
+			tempVelX -= PLAYER_SPEED;
+			setVelX(tempVelX);
 			break;
 		}
 		case SDLK_RIGHT: {
-			velX += PLAYER_SPEED;
+			tempVelX += PLAYER_SPEED;
+			setVelX(tempVelX);
+			break;
+		}
+		case SDLK_SPACE: {
+			if (getDst().y >= getStartHeight().y - 320 and tempVelY >= 0) {
+				tempVelY += JUMP_VEL;
+				setVelY(tempVelY);
+				setGroundState(false);
+			}
 			break;
 		}
 		}
@@ -34,62 +38,36 @@ void Player::movement() {
 	else if (currentEvent->type == SDL_KEYUP and currentEvent->key.repeat == 0) {
 		switch (currentEvent->key.keysym.sym) {
 		case SDLK_LEFT: {
-			velX += PLAYER_SPEED;
+			tempVelX += PLAYER_SPEED;
+			setVelX(tempVelX);
 			break;
 		}
 		case SDLK_RIGHT: {
-			velX -= PLAYER_SPEED;
+			tempVelX -= PLAYER_SPEED;
+			setVelX(tempVelX);
 			break;
 		}
 		}
 	}
 	SDL_Rect newDst = getDst();
-	newDst.x += velX;
+	newDst.x += getVelX();
+	newDst.y -= getVelY();
 	setDst(newDst);
 }
 
-void Player::jumping() {
-	if (currentEvent->type == SDL_KEYDOWN and currentEvent->key.repeat == 0) {
-		switch (currentEvent->key.keysym.sym) {
-		case SDLK_UP: {
-			if (getDst().y >= sheight.y - 320 and velY >= 0) {
-				velY = JUMP_VEL;
-			}
-			break;
+void Player::gravity(
+) {
+	if (getGroundState() == false) {
+		int tempVelY = getVelY();
+		SDL_Rect newDst = getDst();
+		if (tempVelY > -20) {
+			tempVelY -= GRAVITY;
+			setVelY(tempVelY);
+			newDst.y -= getVelY();
+			setDst(newDst);
 		}
-		}
-	}
-	SDL_Rect newDst = getDst();
-	newDst.y -= velY;
-	setDst(newDst);
-	if (velY > 0 and getDst().y < sheight.y) {
-		velY -= GRAVITY;
 	}
 }
-
-void Player::gravity() {
-	SDL_Rect newDst = getDst();
-	if ((velY == 0 or velY < 0) and velY > -20 and getDst().y < sheight.y) {
-		velY -= GRAVITY;
-		newDst.y += velY;
-		setDst(newDst);
-	}
-	else if (getDst().y >= sheight.y) {
-		//velY = 0;
-		newDst.y = sheight.y;
-		//setDst(newDst);
-	}
-}
-
-void Player::setDst(SDL_Rect newDst) {
-	Object::setDst(newDst);
-}
-
-//void Player::render() {
-//	SDL_Rect srcRect = getSrc();
-//	SDL_Rect dstRect = getDst();
-//	SDL_RenderCopy(getRend(), getTex(), &srcRect, &dstRect);
-//}
 
 Player::~Player() {
 }

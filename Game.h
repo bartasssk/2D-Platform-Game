@@ -4,16 +4,18 @@
 #include <stdio.h>
 #include <SDL_image.h>
 #include <vector>
-#include "Obiekty.h"
+#include "Character.h"
+#include "Player.h"
 
 
-class Player;
 class Game {
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	Player* player = nullptr;
+	std::vector <Character> characters;
 	std::vector <Object> objects;
+	Collider *collider;
 public:
 	Game();
 	~Game();

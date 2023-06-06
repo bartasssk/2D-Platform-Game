@@ -1,6 +1,4 @@
-#include "Player.h"
 #include "Game.h"
-#include "Obiekty.h"
 using namespace std;
 
 
