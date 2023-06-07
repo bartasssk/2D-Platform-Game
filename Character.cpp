@@ -1,6 +1,8 @@
 #include "Character.h"
 
-Character::Character(SDL_Renderer* rend): Object::Object(rend, "textures/rycerzyk1.png"), velX(0), velY(0), HP(3), grounded(false) {
+const int GRAVITY = 2;
+
+Character::Character(SDL_Renderer* rend): Object::Object(rend, "textures/rycerzyk1.png"), velX(0), velY(0), HP(3), grounded(false), CanIMoveLeft(true), CanIMoveRight(true){
 	SDL_Rect CharacterDst{};
 	CharacterDst.x = 100;
 	CharacterDst.y = 490;
@@ -25,6 +27,11 @@ void Character::setGroundState(bool state) {
 	grounded = state;
 }
 
+void Character::setCanIMove(bool left, bool right) {
+	CanIMoveLeft = left;
+	CanIMoveRight = right;
+}
+
 int Character::getVelX() {
 	return velX;
 }
@@ -38,6 +45,28 @@ SDL_Rect Character::getStartHeight() {
 
 bool Character::getGroundState() {
 	return grounded;
+}
+
+bool Character::getCanIMoveRight() {
+	return CanIMoveRight;
+}
+
+bool Character::getCanIMoveLeft() {
+	return CanIMoveLeft;
+}
+
+void Character::gravity(
+) {
+	if (getGroundState() == false) {
+		int tempVelY = getVelY();
+		SDL_Rect newDst = getDst();
+		if (tempVelY > -20) {
+			tempVelY -= GRAVITY;
+			setVelY(tempVelY);
+			newDst.y -= getVelY();
+			setDst(newDst);
+		}
+	}
 }
 
 

@@ -10,10 +10,11 @@ class Collider;
 class Player : public Character {
 private:
 	SDL_Event* currentEvent;
+	bool ifnulled;
 public:
 	Player(SDL_Renderer* rend);
 	void move() override;
-	void gravity();
 	void setCurrentSDLEvent(SDL_Event* event) { currentEvent = event; };
+	void setIfNulled(bool result);
 	~Player();
 };

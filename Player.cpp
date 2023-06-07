@@ -4,10 +4,9 @@
 
 const int PLAYER_SPEED = 8;
 const int JUMP_VEL = 24;
-const int GRAVITY = 2;
 
 
-Player::Player(SDL_Renderer* rend) : Character(rend), currentEvent(nullptr) {}
+Player::Player(SDL_Renderer* rend) : Character(rend), currentEvent(nullptr), ifnulled(false) {}
 
 void Player::move() {
 	int tempVelX = getVelX();
@@ -15,17 +14,22 @@ void Player::move() {
 	if (currentEvent->type == SDL_KEYDOWN and currentEvent->key.repeat == 0) {
 		switch (currentEvent->key.keysym.sym) {
 		case SDLK_LEFT: {
-			tempVelX -= PLAYER_SPEED;
-			setVelX(tempVelX);
+			if (getCanIMoveLeft() == true) {
+				tempVelX -= PLAYER_SPEED;
+				setVelX(tempVelX);
+			}
 			break;
 		}
 		case SDLK_RIGHT: {
-			tempVelX += PLAYER_SPEED;
-			setVelX(tempVelX);
+			if (getCanIMoveRight() == true) {
+				tempVelX += PLAYER_SPEED;
+				setVelX(tempVelX);
+			}
 			break;
 		}
 		case SDLK_SPACE: {
-			if (getDst().y >= getStartHeight().y - 320 and tempVelY >= 0) {
+			if (getGroundState() == true) {
+				setCanIMove(true, true);
 				tempVelY += JUMP_VEL;
 				setVelY(tempVelY);
 				setGroundState(false);
@@ -37,16 +41,18 @@ void Player::move() {
 	else if (currentEvent->type == SDL_KEYUP and currentEvent->key.repeat == 0) {
 		switch (currentEvent->key.keysym.sym) {
 		case SDLK_LEFT: {
-			if (getVelX() != 0) {
+			if (getVelX() < 0 or ifnulled == false) {
 				tempVelX += PLAYER_SPEED;
 				setVelX(tempVelX);
+				ifnulled = false;
 				break;
 			}
 		}
 		case SDLK_RIGHT: {
-			if (getVelX() != 0) {
+			if (getVelX() > 0 or ifnulled == false) {
 				tempVelX -= PLAYER_SPEED;
 				setVelX(tempVelX);
+				ifnulled = false;
 				break;
 			}
 		}
@@ -58,18 +64,8 @@ void Player::move() {
 	setDst(newDst);
 }
 
-void Player::gravity(
-) {
-	if (getGroundState() == false) {
-		int tempVelY = getVelY();
-		SDL_Rect newDst = getDst();
-		if (tempVelY > -20) {
-			tempVelY -= GRAVITY;
-			setVelY(tempVelY);
-			newDst.y -= getVelY();
-			setDst(newDst);
-		}
-	}
+void Player::setIfNulled(bool result) {
+	ifnulled = result;
 }
 
 Player::~Player() {

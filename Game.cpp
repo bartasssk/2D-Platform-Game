@@ -4,7 +4,6 @@ using namespace std;
 
 
 Game::Game() : window(nullptr), renderer(nullptr), player(nullptr), objects{}, collider{} {
-	objects.resize(10);
 }
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
@@ -49,17 +48,26 @@ void Game::update()
 
 void Game::setTer(std::vector<Object>& vec) {
 	//Object object1(renderer, "textures/DefaultowyBlok.png");
-	for (int i = 0; i < 5; ++i) {
+	for (int i = 0; i < 15; ++i) {
 		//vec.push_back(object1);
-		//vec.emplace_back(renderer, "textures/DefaultowyBlok.png");
-		vec[i] = std::move(Object(renderer, "textures/DefaultowyBlok.png"));
+		vec.emplace_back(renderer, "textures/DefaultowyBlok.png");
+		//vec[i] = std::move(Object(renderer, "textures/DefaultowyBlok.png"));
 		SDL_Rect newDst{};
 		newDst.x = 128 + i * 64;
 		newDst.y = 564 - i * 64;
 		newDst.w = 64;
 		newDst.h = 64;
 		vec[i].setDst(newDst);
+		if (i >= 6) {
+			SDL_Rect newDst{};
+			newDst.x = 64 + i * 64;
+			newDst.y = 564;
+			newDst.w = 64;
+			newDst.h = 64;
+			vec[i].setDst(newDst);
+		}
 	}
+	
 }
 
 
