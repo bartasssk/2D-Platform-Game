@@ -2,21 +2,25 @@
 #include "Collider.h"
 
 
-const int PLAYER_SPEED = 8;
-const int JUMP_VEL = 24;
+const float PLAYER_SPEED = 8.0f;
+const float JUMP_VEL = 30.0f;
 
 
-Player::Player(SDL_Renderer* rend) : Character(rend), currentEvent(nullptr), ifnulled(false) {}
+Player::Player(SDL_Renderer* rend) : Character(rend, "textures/rycerzyk1.png"), currentEvent(nullptr), ifnulled(false) {}
 
 void Player::move() {
-	int tempVelX = getVelX();
-	int tempVelY = getVelY();
+	float tempVelX = getVelX();
+	float tempVelY = getVelY();
+
 	if (currentEvent->type == SDL_KEYDOWN and currentEvent->key.repeat == 0) {
 		switch (currentEvent->key.keysym.sym) {
 		case SDLK_LEFT: {
 			if (getCanIMoveLeft() == true) {
 				tempVelX -= PLAYER_SPEED;
 				setVelX(tempVelX);
+				if (tempVelX == 0) {
+					ifnulled = false;
+				}
 			}
 			break;
 		}
@@ -24,6 +28,9 @@ void Player::move() {
 			if (getCanIMoveRight() == true) {
 				tempVelX += PLAYER_SPEED;
 				setVelX(tempVelX);
+				if (tempVelX == 0) {
+					ifnulled = false;
+				}
 			}
 			break;
 		}
@@ -44,7 +51,6 @@ void Player::move() {
 			if (getVelX() < 0 or ifnulled == false) {
 				tempVelX += PLAYER_SPEED;
 				setVelX(tempVelX);
-				ifnulled = false;
 				break;
 			}
 		}
@@ -52,7 +58,6 @@ void Player::move() {
 			if (getVelX() > 0 or ifnulled == false) {
 				tempVelX -= PLAYER_SPEED;
 				setVelX(tempVelX);
-				ifnulled = false;
 				break;
 			}
 		}
@@ -60,7 +65,6 @@ void Player::move() {
 	}
 	SDL_Rect newDst = getDst();
 	newDst.x += getVelX();
-	newDst.y -= getVelY();
 	setDst(newDst);
 }
 

@@ -1,25 +1,24 @@
 #include "Character.h"
 
-const int GRAVITY = 2;
+const float GRAVITY = 2.0f;
 
-Character::Character(SDL_Renderer* rend): Object::Object(rend, "textures/rycerzyk1.png"), velX(0), velY(0), HP(3), grounded(false), CanIMoveLeft(true), CanIMoveRight(true){
+Character::Character(SDL_Renderer* rend, const char* FilePath) : Object::Object(rend, FilePath), velX(0), velY(0), HP(3), grounded(false), CanIMoveLeft(true), CanIMoveRight(true) {
 	SDL_Rect CharacterDst{};
-	CharacterDst.x = 100;
-	CharacterDst.y = 490;
+	CharacterDst.x = 128;
+	CharacterDst.y = 128;
 	CharacterDst.h = 64;
 	CharacterDst.w = 64;
-	sheight.y = CharacterDst.y;
 	setDst(CharacterDst);
 }
 
 Character::~Character() {}
 
 
-void Character::setVelX(int p_velX) {
+void Character::setVelX(float p_velX) {
 	velX = p_velX;
 }
 
-void Character::setVelY(int p_velY) {
+void Character::setVelY(float p_velY) {
 	velY = p_velY;
 }
 
@@ -32,15 +31,11 @@ void Character::setCanIMove(bool left, bool right) {
 	CanIMoveRight = right;
 }
 
-int Character::getVelX() {
+float Character::getVelX() {
 	return velX;
 }
-int Character::getVelY() {
+float Character::getVelY() {
 	return velY;
-}
-
-SDL_Rect Character::getStartHeight() {
-	return sheight;
 }
 
 bool Character::getGroundState() {
@@ -60,12 +55,12 @@ void Character::gravity(
 	if (getGroundState() == false) {
 		int tempVelY = getVelY();
 		SDL_Rect newDst = getDst();
-		if (tempVelY > -20) {
+		if (tempVelY > -30.0f) {
 			tempVelY -= GRAVITY;
 			setVelY(tempVelY);
-			newDst.y -= getVelY();
-			setDst(newDst);
 		}
+		newDst.y -= getVelY();
+		setDst(newDst);
 	}
 }
 

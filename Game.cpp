@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Collider.h"
+#include <ctime>
 using namespace std;
 
 
@@ -17,11 +18,15 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		renderer = SDL_CreateRenderer(window, -1, 0);
 	}
 
+	srand(time(NULL));
+
 	player = new Player(renderer);
 	setTer(objects);
+	setEnemies(enemies);
+
 }
 
-void Game::events(SDL_Event &event) {
+void Game::events(SDL_Event& event) {
 	player->setCurrentSDLEvent(&event);
 }
 
@@ -36,11 +41,22 @@ void Game::update()
 		character0 > gravity();
 
 	}*/
-	collider->isGround(player, objects);
-	collider->canImove(player, objects);
+	collider->Ground(player, objects);
+	collider->Wall(player, objects);
+	collider->GroundE(enemies, objects);
+	collider->EndOfPlatform(enemies, objects);
+	collider->WallE(enemies, objects);
 	player->move();
-	if (player->getGroundState() == false){
+	if (player->getGroundState() == false) {
 		player->gravity();
+	}
+	for (auto& item : enemies) {
+		if (item.getGroundState() == false) {
+			item.gravity();
+		}
+		else if (item.getGroundState() == true) {
+			item.move();
+		}
 	}
 	//enemys->movement();
 
@@ -54,7 +70,7 @@ void Game::setTer(std::vector<Object>& vec) {
 		//vec[i] = std::move(Object(renderer, "textures/DefaultowyBlok.png"));
 		SDL_Rect newDst{};
 		newDst.x = 128 + i * 64;
-		newDst.y = 564 - i * 64;
+		newDst.y = 564 - 3 * 64;
 		newDst.w = 64;
 		newDst.h = 64;
 		vec[i].setDst(newDst);
@@ -67,7 +83,25 @@ void Game::setTer(std::vector<Object>& vec) {
 			vec[i].setDst(newDst);
 		}
 	}
-	
+	vec.emplace_back(renderer, "textures/DefaultowyBlok.png");
+	SDL_Rect newDst{};
+	newDst.x = 128 + (13 * 64);
+	newDst.y = 564 - 64;
+	newDst.w = 64;
+	newDst.h = 64;
+	vec[15].setDst(newDst);
+}
+
+void Game::setEnemies(std::vector<Enemy>& vec) {
+	for (int i = 0; i < 3; ++i) {
+		vec.emplace_back(renderer);
+		SDL_Rect newDst;
+		newDst.x = (1 + i) * 257;
+		newDst.y = 64;
+		newDst.h = 64;
+		newDst.w = 64;
+		vec[i].setDst(newDst);
+	}
 }
 
 
@@ -77,6 +111,9 @@ void Game::render()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	for (size_t i = 0; i < objects.size(); ++i) {
 		objects[i].render();
+	}
+	for (size_t j = 0; j < enemies.size(); ++j) {
+		enemies[j].render();
 	}
 	player->render();
 	SDL_RenderPresent(renderer);
@@ -89,6 +126,9 @@ void Game::clean()
 	for (int i = 0; i < objects.size(); ++i) {
 		objects[i].clean();
 	}
+	for (int i = 0; i < enemies.size(); ++i) {
+		enemies[i].clean();
+	}
 	player->clean();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
@@ -96,19 +136,19 @@ void Game::clean()
 	cout << "Game cleaned" << endl;
 }
 
-bool Game::running(SDL_Event &event) {
-		switch (event.type) {
-		case SDL_QUIT: {
+bool Game::running(SDL_Event& event) {
+	switch (event.type) {
+	case SDL_QUIT: {
+		return false;
+		break;
+	}
+	case SDL_KEYDOWN: {
+		if (event.key.keysym.sym == SDLK_ESCAPE) {
 			return false;
 			break;
 		}
-		case SDL_KEYDOWN: {
-			if (event.key.keysym.sym == SDLK_ESCAPE) {
-				return false;
-				break;
-			}
-		}
-		}
+	}
+	}
 	return true;
 }
 

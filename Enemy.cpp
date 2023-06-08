@@ -1,11 +1,15 @@
 #include "Enemy.h"
 
-const int ENEMY_SPEED = 2;
+const float ENEMY_SPEED = +2.0f;
 
-Enemy::Enemy(SDL_Renderer* rend): Character(rend) {}
-
-void Enemy::move() {
-
+Enemy::Enemy(SDL_Renderer* rend) : Character(rend, "textures/wrog1.png") {
+	setVelX(ENEMY_SPEED);
 }
 
-Enemy::~Enemy(){}
+void Enemy::move() {
+	SDL_Rect newDst = getDst();
+	newDst.x += getVelX();
+	setDst(newDst);
+}
+
+Enemy::~Enemy() {}

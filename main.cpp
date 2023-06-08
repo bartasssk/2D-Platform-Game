@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
 {
 	const int FPS = 60;
 	const int FrameDelay = 1000 / FPS;
-	const int SCREEN_WIDTH = 1280;
+	const int SCREEN_WIDTH = 1600;
 	const int SCREEN_HEIGHT = 720;
 
 	Uint32 FrameStart;
