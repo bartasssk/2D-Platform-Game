@@ -32,8 +32,10 @@ void Enemy::attack(Enemy *enemy, Player* player) {
 }
 
 void Enemy::die() {
-	if(HP<=0)
-	ifdead = true;
+	if (HP <= 0) {
+		ifdead = true;
+		setDst({ 0,0,0,0 });
+	}
 }
 
 Enemy::~Enemy() {}
