@@ -117,7 +117,6 @@ void Collider::EndOfPlatform(std::vector<Enemy>& enemies, std::vector<Object>& o
 		const int EnemyWidth = enemies[j].getDst().w;
 		bool End = true;
 
-		SDL_Rect lastBlock;
 		SDL_Rect nextBlockRight = enemies[j].getDst();
 		SDL_Rect nextBlockLeft = enemies[j].getDst();
 		nextBlockRight.x = EnemyRight + 2;

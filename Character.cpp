@@ -1,8 +1,10 @@
 #include "Character.h"
+#include "Enemy.h"
+#include "Player.h"
 
 const float GRAVITY = 2.0f;
 
-Character::Character(SDL_Renderer* rend, const char* FilePath) : Object::Object(rend, FilePath), velX(0), velY(0), HP(3), grounded(false), CanIMoveLeft(true), CanIMoveRight(true) {
+Character::Character(SDL_Renderer* rend, const char* FilePath) : Object::Object(rend, FilePath), velX(0), velY(0), HP(3), grounded(false), CanIMoveLeft(true), CanIMoveRight(true), ifdead(false) {
 	SDL_Rect CharacterDst{};
 	CharacterDst.x = 128;
 	CharacterDst.y = 128;
@@ -31,6 +33,10 @@ void Character::setCanIMove(bool left, bool right) {
 	CanIMoveRight = right;
 }
 
+void Character::setHP(int newHP) {
+	HP = newHP;
+}
+
 float Character::getVelX() {
 	return velX;
 }
@@ -38,22 +44,23 @@ float Character::getVelY() {
 	return velY;
 }
 
+int Character::getHP() {
+	return HP;
+}
+
 bool Character::getGroundState() {
 	return grounded;
 }
 
-bool Character::getCanIMoveRight() {
-	return CanIMoveRight;
-}
 
-bool Character::getCanIMoveLeft() {
-	return CanIMoveLeft;
+bool Character::getIfDead() {
+	return ifdead;
 }
 
 void Character::gravity(
 ) {
 	if (getGroundState() == false) {
-		int tempVelY = getVelY();
+		float tempVelY = getVelY();
 		SDL_Rect newDst = getDst();
 		if (tempVelY > -30.0f) {
 			tempVelY -= GRAVITY;

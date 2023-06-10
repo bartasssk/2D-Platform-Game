@@ -1,16 +1,14 @@
 #pragma once
 #include <SDL.h>
 #include <iostream>
-#pragma once
-#include <SDL.h>
-#include <iostream>
 #include <stdio.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <vector>
 #include "Character.h"
 #include "Player.h"
 #include "Enemy.h"
-
+#include "Collider.h"
 
 class Game {
 private:
@@ -20,6 +18,7 @@ private:
 	std::vector <Object> objects;
 	std::vector <Enemy> enemies;
 	Collider* collider;
+	TTF_Font* font;
 public:
 	Game();
 	~Game();
@@ -28,6 +27,7 @@ public:
 	void events(SDL_Event& event);
 	void update();
 	void render();
+	void showPlayerHP();
 	void setTer(std::vector <Object>& vec);
 	void setEnemies(std::vector <Enemy>& vec);
 	void clean();

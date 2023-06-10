@@ -15,10 +15,12 @@ public:
 	Object() = default;
 	void render();
 	void setDst(SDL_Rect newDst);
+	void setSrc(SDL_Rect newSrc);
+	void setTex(SDL_Texture* newTexture);
 	void clean();
-	SDL_Texture* getTex();
 	SDL_Renderer* getRend();
 	SDL_Rect getDst();
 	SDL_Rect getSrc();
+	SDL_Texture* getTex();
 	~Object();
 };

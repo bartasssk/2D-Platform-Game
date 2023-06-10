@@ -1,10 +1,10 @@
 #include "Game.h"
-#include "Collider.h"
 #include <ctime>
+#include <string>
 using namespace std;
 
 
-Game::Game() : window(nullptr), renderer(nullptr), player(nullptr), objects{}, collider{} {
+Game::Game() : window(nullptr), renderer(nullptr), player(nullptr), objects{}, collider{}, font(nullptr) {
 }
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
@@ -13,14 +13,16 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	if (fullscreen) {
 		isFullscreen = SDL_WINDOW_FULLSCREEN;
 	}
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		window = SDL_CreateWindow(title, xpos, ypos, width, height, fullscreen);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 	}
 
-	srand(time(NULL));
+	TTF_Init();
 
-	player = new Player(renderer);
+	player = new Player(renderer, "textures/rycerzykLeft.png", "textures/rycerzykRight.png");
+	font = TTF_OpenFont("font/slkscr.ttf", 64);
 	setTer(objects);
 	setEnemies(enemies);
 
@@ -33,20 +35,14 @@ void Game::events(SDL_Event& event) {
 
 void Game::update()
 {
-	//vector<character> characters(player, enemy)
-	/*for (auto& character : characters)
-	{
-		vcharacter->movement();
-		character->jump();
-		character0 > gravity();
-
-	}*/
 	collider->Ground(player, objects);
 	collider->Wall(player, objects);
 	collider->GroundE(enemies, objects);
 	collider->EndOfPlatform(enemies, objects);
 	collider->WallE(enemies, objects);
 	player->move();
+	player->animate();
+	player->die();
 	if (player->getGroundState() == false) {
 		player->gravity();
 	}
@@ -57,8 +53,12 @@ void Game::update()
 		else if (item.getGroundState() == true) {
 			item.move();
 		}
+		item.attack(&item, player);
+		item.die();
 	}
-	//enemys->movement();
+	for (auto& item : enemies) {
+		player->attack(&item, player);
+	}
 
 }
 
@@ -93,10 +93,10 @@ void Game::setTer(std::vector<Object>& vec) {
 }
 
 void Game::setEnemies(std::vector<Enemy>& vec) {
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 2; ++i) {
 		vec.emplace_back(renderer);
 		SDL_Rect newDst;
-		newDst.x = (1 + i) * 257;
+		newDst.x = (2 + i) * 257;
 		newDst.y = 64;
 		newDst.h = 64;
 		newDst.w = 64;
@@ -113,12 +113,39 @@ void Game::render()
 		objects[i].render();
 	}
 	for (size_t j = 0; j < enemies.size(); ++j) {
+		if(enemies[j].getIfDead() == false)
 		enemies[j].render();
 	}
+	if (player->getIfDead() == false)
 	player->render();
+	player->renderSword();
+
+	showPlayerHP();
 	SDL_RenderPresent(renderer);
 }
 
+void Game::showPlayerHP() {
+	int tempHP = player->getHP();
+	SDL_Color text_color = { 255, 255, 255 };
+	std::string message = std::to_string(tempHP);
+	message = "HP: " + message;
+	SDL_Surface* surfHP = TTF_RenderText_Solid(font, message.c_str(), text_color);
+	SDL_Texture* HP = SDL_CreateTextureFromSurface(renderer, surfHP);
+
+	SDL_Rect dst, src;
+
+	src.x = 0;
+	src.y = 0;
+	src.w = surfHP->w;
+	src.h = surfHP->h;
+	dst.x = 0;
+	dst.y = 0;
+	dst.w = surfHP->w;
+	dst.h = surfHP->h;
+
+	SDL_RenderCopy(renderer, HP, &src, &dst);
+	SDL_FreeSurface(surfHP);
+}
 
 
 void Game::clean()
@@ -132,6 +159,8 @@ void Game::clean()
 	player->clean();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	TTF_CloseFont(font);
+	TTF_Quit();
 	SDL_Quit();
 	cout << "Game cleaned" << endl;
 }

@@ -14,10 +14,6 @@ Object::Object(SDL_Renderer* rend, const char* FilePath) : renderer(rend), textu
 	src.h = 64;
 }
 
-SDL_Texture* Object::getTex() {
-	return texture;
-}
-
 SDL_Rect Object::getDst() {
 	return dst;
 }
@@ -30,8 +26,20 @@ SDL_Renderer* Object::getRend() {
 	return renderer;
 }
 
+SDL_Texture* Object::getTex() {
+	return texture;
+}
+
 void Object::setDst(SDL_Rect newDst) {
 	dst = newDst;
+}
+
+void Object::setSrc(SDL_Rect newSrc) {
+	src = newSrc;
+}
+
+void Object::setTex(SDL_Texture* newTexture) {
+	texture = newTexture;
 }
 
 void Object::render() {
