@@ -41,7 +41,7 @@ Player::Player(SDL_Renderer* rend, const char* FilePathLeft, const char* FilePat
 	SwordSrc.h = 32;
 	sword.setDst(SwordDst);
 	sword.setSrc(SwordSrc);
-	setHP(5);
+	setHP(3);
 }
 
 void Player::move() {

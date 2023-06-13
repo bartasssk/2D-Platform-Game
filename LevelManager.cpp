@@ -4,6 +4,8 @@ LevelManager::LevelManager(SDL_Renderer* rend): renderer(rend), object(renderer,
 	level = 1;
 }
 
+const int BLOCK_WIDTH = 64;
+
 void LevelManager::setTerrain(std::vector<Object>& objects) {
 	if (level == 1) {
 		for (int i = 0; i < 24; ++i) {
@@ -12,28 +14,28 @@ void LevelManager::setTerrain(std::vector<Object>& objects) {
 		SDL_Rect dst;
 		dst = objects[0].getDst();
 		for (int i = 0; i < 7; ++i) {
-			dst.x = i * 64;
-			dst.y = 5 * 64;
+			dst.x = i * BLOCK_WIDTH;
+			dst.y = 5 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 7; i < 15; ++i) {
-			dst.x = (i-1) * 64;
-			dst.y = 8 * 64;
+			dst.x = (i-1) * BLOCK_WIDTH;
+			dst.y = 8 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 15; i < 17; ++i) {
-			dst.x = 13 * 64;
-			dst.y = (i-9) * 64;
+			dst.x = 13 * BLOCK_WIDTH;
+			dst.y = (i-9) * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 17; i < 22; ++i) {
-			dst.x = (i - 1) * 64;
-			dst.y = 4 * 64;
+			dst.x = (i - 1) * BLOCK_WIDTH;
+			dst.y = 4 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 22; i < 24; ++i) {
-			dst.x = (i + 1) * 64;
-			dst.y = 10 * 64;
+			dst.x = (i + 1) * BLOCK_WIDTH;
+			dst.y = 10 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 	}
@@ -47,28 +49,28 @@ void LevelManager::setTerrain(std::vector<Object>& objects) {
 		SDL_Rect dst;
 		dst = objects[0].getDst();
 		for (int i = 0; i < 2; ++i) {
-			dst.x = i * 64;
-			dst.y = 10 * 64;
+			dst.x = i * BLOCK_WIDTH;
+			dst.y = 10 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 2; i < 5; ++i) {
-			dst.x = (i+2) * 64;
-			dst.y = 10 * 64;
+			dst.x = (i+2) * BLOCK_WIDTH;
+			dst.y = 10 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 5; i < 7; ++i) {
-			dst.x = (2*i-2) * 64;
-			dst.y = (18-(2*i)) * 64;
+			dst.x = (2*i-2) * BLOCK_WIDTH;
+			dst.y = (18-(2*i)) * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 7; i < 10; ++i) {
-			dst.y = 6 * 64;
-			dst.x = (i + 7) * 64;
+			dst.y = 6 * BLOCK_WIDTH;
+			dst.x = (i + 7) * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 10; i < 15; ++i) {
-			dst.y = 6 * 64;
-			dst.x = (i + 10) * 64;
+			dst.y = 6 * BLOCK_WIDTH;
+			dst.x = (i + 10) * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 	}
@@ -82,40 +84,40 @@ void LevelManager::setTerrain(std::vector<Object>& objects) {
 		SDL_Rect dst;
 		dst = objects[0].getDst();
 		for (int i = 0; i < 2; ++i) {
-			dst.x = i * 64;
-			dst.y = 6 * 64;
+			dst.x = i * BLOCK_WIDTH;
+			dst.y = 6 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 2; i < 4; ++i) {
-			dst.x = (i+1) * 64;
-			dst.y = 3 * 64;
+			dst.x = (i+1) * BLOCK_WIDTH;
+			dst.y = 3 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 4; i < 7; ++i) {
-			dst.x = (i + 3) * 64;
-			dst.y = 7 * 64;
+			dst.x = (i + 3) * BLOCK_WIDTH;
+			dst.y = 7 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 7; i < 12; ++i) {
-			dst.x = (5 + i) * 64;
-			dst.y = 5 * 64;
+			dst.x = (5 + i) * BLOCK_WIDTH;
+			dst.y = 5 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 12; i < 15; ++i) {
-			dst.x = (i + 3) * 64;
-			dst.y = 8 * 64;
+			dst.x = (i + 3) * BLOCK_WIDTH;
+			dst.y = 8 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
 		for (int i = 15; i < 20; ++i) {
-			dst.x = (i + 5) * 64;
-			dst.y = 5 * 64;
+			dst.x = (i + 5) * BLOCK_WIDTH;
+			dst.y = 5 * BLOCK_WIDTH;
 			objects[i].setDst(dst);
 		}
-		dst.x = 18 * 64;
-		dst.y = 7 * 64;
+		dst.x = 18 * BLOCK_WIDTH;
+		dst.y = 7 * BLOCK_WIDTH;
 		objects[20].setDst(dst);
-		dst.x = 20 * 64;
-		dst.y = 4 * 64;
+		dst.x = 20 * BLOCK_WIDTH;
+		dst.y = 4 * BLOCK_WIDTH;
 		objects[21].setDst(dst);
 	}
 }
@@ -128,12 +130,12 @@ void LevelManager::setEnemies(std::vector<Enemy>& enemies) {
 
 		SDL_Rect dst;
 		dst = enemies[0].getDst();
-		dst.y = 64;
+		dst.y = BLOCK_WIDTH;
 		dst.x = 7 * 65;
 		enemies[0].setDst(dst);
-		dst.x = 11 * 64;
+		dst.x = 11 * BLOCK_WIDTH;
 		enemies[1].setDst(dst);
-		dst.x = 17 * 64;
+		dst.x = 17 * BLOCK_WIDTH;
 		enemies[2].setDst(dst);
 	}
 	else if (level == 2) {
@@ -146,10 +148,10 @@ void LevelManager::setEnemies(std::vector<Enemy>& enemies) {
 
 		SDL_Rect dst;
 		dst = enemies[0].getDst();
-		dst.y = 64;
-		dst.x = 10 * 64;
+		dst.y = BLOCK_WIDTH;
+		dst.x = 10 * BLOCK_WIDTH;
 		enemies[0].setDst(dst);
-		dst.x = 22 * 64;
+		dst.x = 22 * BLOCK_WIDTH;
 		enemies[1].setDst(dst);
 	}
 	else if (level == 3) {
@@ -162,17 +164,17 @@ void LevelManager::setEnemies(std::vector<Enemy>& enemies) {
 
 		SDL_Rect dst;
 		dst = enemies[0].getDst();
-		dst.y = 64;
-		dst.x = 3 * 64;
+		dst.y = BLOCK_WIDTH;
+		dst.x = 3 * BLOCK_WIDTH;
 		enemies[0].setDst(dst);
-		dst.x = 12 * 64;
+		dst.x = 12 * BLOCK_WIDTH;
 		enemies[1].setDst(dst);
-		dst.x = 16 * 64;
+		dst.x = 16 * BLOCK_WIDTH;
 		enemies[2].setDst(dst);
-		dst.x = 9 * 64;
+		dst.x = 9 * BLOCK_WIDTH;
 		enemies[3].setDst(dst);
-		dst.x = 15 * 64;
-		dst.y = 7 * 64;
+		dst.x = 15 * BLOCK_WIDTH;
+		dst.y = 7 * BLOCK_WIDTH;
 		enemies[4].setDst(dst);
 	}
 }

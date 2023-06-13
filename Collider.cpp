@@ -4,8 +4,6 @@
 
 Collider::Collider() {}
 
-//Hamuje spadanie
-
 void Collider::Ground(Player* player, std::vector<Object>& obj) {
 	SDL_Rect PlayerDst = player->getDst();
 	bool ground = false;
@@ -56,8 +54,6 @@ void Collider::GroundE(std::vector<Enemy>& enemies, std::vector<Object>& obj) {
 		}
 	}
 }
-
-//Hamuje poruszanie siê
 
 void Collider::Wall(Player* player, std::vector<Object>& obj) {
 	SDL_Rect PlayerDst = player->getDst();
@@ -113,6 +109,18 @@ void Collider::Wall(Player* player, std::vector<Object>& obj) {
 			player->setDst(newDst);
 			player->setIfNulled(true);
 			player->setCanIMove(false, true);
+			check = false;
+		}
+		else if (playerRight >= 1600 and player->getVelX() > 0) {
+			player->setVelX(0);
+			SDL_Rect newDst;
+			newDst.x = 1536;
+			newDst.y = player->getDst().y;
+			newDst.w = player->getDst().w;
+			newDst.h = player->getDst().h;
+			player->setDst(newDst);
+			player->setIfNulled(true);
+			player->setCanIMove(true, false);
 			check = false;
 		}
 	}

@@ -36,42 +36,40 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 }
 
 void Game::start(SDL_Event& event) {
-
-	std::string title = "RISE FROM THE ASHES";
-	SDL_Surface* surfTitle = TTF_RenderText_Solid(font4, title.c_str(), text_color);
-	SDL_Texture* TitleTex = SDL_CreateTextureFromSurface(renderer, surfTitle);
-	SDL_Rect src1, dst1, src2, dst2;
-	src1.x = 0;
-	src1.y = 0;
-	src1.w = surfTitle->w;
-	src1.h = surfTitle->h;
-	dst1.x = 50;
-	dst1.y = 250;
-	dst1.w = surfTitle->w;
-	dst1.h = surfTitle->h;
-	SDL_FreeSurface(surfTitle);
-	std::string instruction = "Press any button to start or ESC to quit";
-	SDL_Surface* surfInst = TTF_RenderText_Solid(font3, instruction.c_str(), text_color);
-	SDL_Texture* InstTex = SDL_CreateTextureFromSurface(renderer, surfInst);
-	src2 = src1;
-	src2.w = surfInst->w;
-	src2.h = surfInst->h;
-	dst2.x = dst1.x;
-	dst2.y = dst1.y + dst1.h + 3;
-	dst2.w = surfInst->w;
-	dst2.h = surfInst->h;
-	SDL_FreeSurface(surfInst);
-
 	if (started == false) {
+		std::string title = "RISE FROM THE ASHES";
+		SDL_Surface* surfTitle = TTF_RenderText_Solid(font4, title.c_str(), text_color);
+		SDL_Texture* TitleTex = SDL_CreateTextureFromSurface(renderer, surfTitle);
+		SDL_Rect src1, dst1, src2, dst2;
+		src1.x = 0;
+		src1.y = 0;
+		src1.w = surfTitle->w;
+		src1.h = surfTitle->h;
+		dst1.x = 50;
+		dst1.y = 250;
+		dst1.w = surfTitle->w;
+		dst1.h = surfTitle->h;
+		SDL_FreeSurface(surfTitle);
+		std::string instruction = "Press any button to start or ESC to quit";
+		SDL_Surface* surfInst = TTF_RenderText_Solid(font3, instruction.c_str(), text_color);
+		SDL_Texture* InstTex = SDL_CreateTextureFromSurface(renderer, surfInst);
+		src2 = src1;
+		src2.w = surfInst->w;
+		src2.h = surfInst->h;
+		dst2.x = dst1.x;
+		dst2.y = dst1.y + dst1.h + 3;
+		dst2.w = surfInst->w;
+		dst2.h = surfInst->h;
+		SDL_FreeSurface(surfInst);
 		SDL_RenderCopy(renderer, TitleTex, &src1, &dst1);
 		SDL_RenderCopy(renderer, InstTex, &src2, &dst2);
+		SDL_DestroyTexture(TitleTex);
+		SDL_DestroyTexture(InstTex);
 	}
 
 	if (event.type == SDL_KEYDOWN and event.key.repeat == 0) {
-		if (SDLK_KP_ENTER) {
 			player->setIfDead(false);
 			started = true;
-		}
 	}
 }
 
@@ -122,7 +120,7 @@ void Game::progress() {
 		}
 	}
 
-	if (player->getDst().x >= 1600 and alldead == true and levelmanager->getLevel()<4) {
+	if (player->getDst().x + player->getDst().w >= 1600 and alldead == true and levelmanager->getLevel()<4) {
 		SDL_Rect dst;
 		levelmanager->setLevel(levelmanager->getLevel() + 1);
 		levelmanager->setTerrain(objects);
@@ -159,6 +157,8 @@ void Game::progress() {
 		dst2.h = surfInst->h;
 		SDL_FreeSurface(surfInst);
 		SDL_RenderCopy(renderer, InstTex, &src2, &dst2);
+		SDL_DestroyTexture(ggTex);
+		SDL_DestroyTexture(InstTex);
 	}
 }
 
@@ -210,6 +210,7 @@ void Game::showPlayerHP() {
 
 		SDL_RenderCopy(renderer, HP, &src, &dst);
 		SDL_FreeSurface(surfHP);
+		SDL_DestroyTexture(HP);
 	}
 }
 
@@ -230,6 +231,7 @@ void Game::death() {
 		dst.h = surfMessage->h;
 		SDL_FreeSurface(surfMessage);
 		SDL_RenderCopy(renderer, GameOver, &src, &dst);
+		SDL_DestroyTexture(GameOver);
 	}
 }
 
@@ -247,6 +249,7 @@ void Game::clean()
 	TTF_CloseFont(font1);
 	TTF_CloseFont(font2);
 	TTF_CloseFont(font3);
+	TTF_CloseFont(font4);
 	TTF_Quit();
 	SDL_Quit();
 	cout << "Game cleaned" << endl;
@@ -280,5 +283,4 @@ Game::~Game() {
 	player = nullptr;
 	delete levelmanager;
 	levelmanager = nullptr;
-
 }
