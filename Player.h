@@ -33,6 +33,6 @@ public:
 	void renderSword();
 	void setCurrentSDLEvent(SDL_Event* event) { currentEvent = event; };
 	void setIfNulled(bool result);
-	State getState();
+	void setIfDead(bool newState);
 	~Player();
 };

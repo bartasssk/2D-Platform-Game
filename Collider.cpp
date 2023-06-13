@@ -15,7 +15,7 @@ void Collider::Ground(Player* player, std::vector<Object>& obj) {
 
 	for (auto& item : obj) {
 		SDL_Rect ObjectDst = item.getDst();
-		if (playerBottom >= ObjectDst.y and playerBottom < ObjectDst.y + 32 and ((playerRight >= ObjectDst.x and playerRight <= ObjectDst.x + ObjectDst.w) or (playerLeft >= ObjectDst.x and playerLeft <= ObjectDst.x + ObjectDst.w)) and player->getVelY() <= 0) {
+		if (playerBottom >= ObjectDst.y and playerBottom < ObjectDst.y + 32 and ((playerRight > ObjectDst.x and playerRight <= ObjectDst.x + ObjectDst.w) or (playerLeft >= ObjectDst.x and playerLeft < ObjectDst.x + ObjectDst.w)) and player->getVelY() <= 0) {
 			ground = true;
 			player->setVelY(0);
 			SDL_Rect newDst{};
@@ -81,7 +81,7 @@ void Collider::Wall(Player* player, std::vector<Object>& obj) {
 			player->setCanIMove(true, false);
 			check = false;
 		}
-		else if (player->getVelX() < 0 and playerLeft >= ObjectDst.x + 44 and playerLeft <= ObjectDst.x + ObjectDst.w and (playerBottom > ObjectDst.y and playerBottom < ObjectDst.y + ObjectDst.h or playerTop <= ObjectDst.y + ObjectDst.h and playerTop >= ObjectDst.y)) {
+		else if (player->getVelX() < 0 and playerLeft >= ObjectDst.x + 44 and playerLeft <= ObjectDst.x + ObjectDst.w and (playerBottom > ObjectDst.y and playerBottom < ObjectDst.y + ObjectDst.h or playerTop < ObjectDst.y + ObjectDst.h and playerTop >= ObjectDst.y)) {
 			player->setVelX(0);
 			SDL_Rect newDst;
 			newDst.x = ObjectDst.x + ObjectDst.w;
@@ -93,7 +93,7 @@ void Collider::Wall(Player* player, std::vector<Object>& obj) {
 			player->setCanIMove(false, true);
 			check = false;
 		}
-		else if ((playerTop <= ObjectDst.y + ObjectDst.h and playerTop > ObjectDst.y + 43) and ((playerRight >= ObjectDst.x and playerRight <= ObjectDst.x + ObjectDst.w) or (playerLeft >= ObjectDst.x and playerLeft <= ObjectDst.x + ObjectDst.w))) {
+		else if ((playerTop <= ObjectDst.y + ObjectDst.h and playerTop > ObjectDst.y + 43) and ((playerRight > ObjectDst.x and playerRight <= ObjectDst.x + ObjectDst.w) or (playerLeft >= ObjectDst.x and playerLeft < ObjectDst.x + ObjectDst.w))) {
 			player->setVelY(0);
 			SDL_Rect newDst;
 			newDst.x = player->getDst().x;
@@ -101,6 +101,18 @@ void Collider::Wall(Player* player, std::vector<Object>& obj) {
 			newDst.w = player->getDst().w;
 			newDst.h = player->getDst().h;
 			player->setDst(newDst);
+			check = false;
+		}
+		else if (playerLeft <= 0 and player->getVelX() < 0) {
+			player->setVelX(0);
+			SDL_Rect newDst;
+			newDst.x = 0;
+			newDst.y = player->getDst().y;
+			newDst.w = player->getDst().w;
+			newDst.h = player->getDst().h;
+			player->setDst(newDst);
+			player->setIfNulled(true);
+			player->setCanIMove(false, true);
 			check = false;
 		}
 	}

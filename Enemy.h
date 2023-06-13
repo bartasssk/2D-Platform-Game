@@ -7,6 +7,7 @@ private:
 	bool hit;
 public:
 	Enemy(SDL_Renderer* rend);
+	Enemy();
 	void move() override;
 	void attack(Enemy *enemy, Player* player) override;
 	void die() override;

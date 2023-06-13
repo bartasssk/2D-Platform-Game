@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Collider.h"
 #include "Enemy.h"
+#include <string>
 
 
 const float PLAYER_SPEED = 8.0f;
@@ -22,12 +23,13 @@ Player::Player(SDL_Renderer* rend, const char* FilePathLeft, const char* FilePat
 	SDL_FreeSurface(swordSurf2);
 	currentSide = Side::RIGHT;
 	currentState = State::STANDING;
-	movingDelay = 10;
+	movingDelay = 8;
 	standingDelay = 15;
 	swordDelay = 2;
 	currentFrame = 0;
 	ifnulled = false;
 	hit = false;
+	ifdead = true;
 	SDL_Rect SwordDst = sword.getDst(), SwordSrc = sword.getSrc();
 
 	SwordDst.x = 0;
@@ -39,7 +41,7 @@ Player::Player(SDL_Renderer* rend, const char* FilePathLeft, const char* FilePat
 	SwordSrc.h = 32;
 	sword.setDst(SwordDst);
 	sword.setSrc(SwordSrc);
-	setHP(10);
+	setHP(5);
 }
 
 void Player::move() {
@@ -114,7 +116,7 @@ void Player::attack(Enemy *enemy, Player* player) {
 
 	if (currentState == State::ATTACKING and currentSide == Side::LEFT) {
   		sword.setTex(swordLeft);
-		swordDst.x = PlayerDst.x - 32;
+		swordDst.x = PlayerDst.x - 48;
 		swordDst.y = PlayerDst.y;
 		sword.setDst(swordDst);
 
@@ -127,13 +129,13 @@ void Player::attack(Enemy *enemy, Player* player) {
 	}
 	else if(currentState == State::ATTACKING and currentSide == Side::RIGHT){
 		sword.setTex(swordRight);
-		swordDst.x = PlayerDst.x + 32;
+		swordDst.x = PlayerDst.x + 48;
 		swordDst.y = PlayerDst.y;
 		sword.setDst(swordDst);
 		if (hit == false) {
 			if (SDL_HasIntersection(&EnemyDst, &swordDst)) {
 				hit = true;
-				enemy->setHP(enemy->getHP() - 1);
+ 				enemy->setHP(enemy->getHP() - 1);
 				enemy->getHP();
 			}
 		}
@@ -199,7 +201,7 @@ void Player::animate() {
 			currentFrame = 0;
 		}
 		else if (hit == true) {
-			currentFrame = 5;
+			currentFrame = 10;
 		}
 
 		SDL_Rect src = getSrc();
@@ -211,7 +213,7 @@ void Player::animate() {
 			swordSrc.x = currentFrame / swordDelay * 32;
 			sword.setSrc(swordSrc);
 		}
-		else if (hit == true and currentFrame / swordDelay < 5) {
+		else if (hit == true and currentFrame / swordDelay <= 5) {
 			swordSrc.x = currentFrame / swordDelay * 32;
 			sword.setSrc(swordSrc);
 		}
@@ -224,8 +226,16 @@ void Player::animate() {
 }
 
 void Player::die() {
-	if(HP<=0)
-	ifdead = true;
+	const int SCREEN_HEGHT = 720;
+
+	if (HP <= 0) {
+		ifdead = true;
+	}
+
+	if (getDst().y > 720) {
+		ifdead = true;
+		setHP(0);
+	}
 }
 
 void Player::setIfNulled(bool result) {
@@ -236,8 +246,8 @@ void Player::renderSword() {
 	sword.render();
 }
 
-Player::State Player::getState() {
-	return currentState;
+void Player::setIfDead(bool newState) {
+	ifdead = newState;
 }
 
 Player::~Player() {
