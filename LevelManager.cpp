@@ -1,6 +1,6 @@
 #include "LevelManager.h"
 
-LevelManager::LevelManager(SDL_Renderer* rend): renderer(rend), object(renderer, "textures/DefaultowyBlok.png") {
+LevelManager::LevelManager(SDL_Renderer* rend): renderer(rend) {
 	level = 1;
 }
 
