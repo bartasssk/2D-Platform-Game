@@ -1,6 +1,4 @@
-#include "Player.h"
 #include "Game.h"
-#include "Obiekty.h"
 using namespace std;
 
 
@@ -8,8 +6,8 @@ int main(int argc, char* argv[])
 {
 	const int FPS = 60;
 	const int FrameDelay = 1000 / FPS;
-	const int SCREEN_WIDTH = 1280;
-	const int SCREEN_HEIGHT = 720;
+	const int SCREEN_WIDTH = 1600;
+	const int SCREEN_HEIGHT = 768;
 
 	Uint32 FrameStart;
 	int FrameTime;
@@ -17,8 +15,6 @@ int main(int argc, char* argv[])
 	Game game;
 	game.init("Rise from the ashes", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	SDL_Event event{};
-	/*game.setTer();*/
-
 	while (1) {
 		FrameStart = SDL_GetTicks();
 		FrameTime = SDL_GetTicks() - FrameStart;
@@ -26,10 +22,13 @@ int main(int argc, char* argv[])
 		if (FrameDelay > FrameTime) {
 			SDL_Delay(FrameDelay - FrameTime);
 		}
+
 		SDL_PollEvent(&event);
+
 		if (!game.running(event)) {
 			break;
 		}
+		game.start(event);
 		game.events(event);
 		game.update();
 		game.render();
